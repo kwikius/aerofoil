@@ -2,6 +2,7 @@
 #define AEROFOIL_GRAPHICS_WINDOW_HPP_INCLUDED
 
 #include <wx/wx.h>
+#include <wx/scrolwin.h>
 #include <quan/two_d/vect.hpp>
 #include <quan/length.hpp>
 #include <quan/reciprocal_length.hpp>
@@ -11,7 +12,7 @@
 
 #include "aerofoilDoc.hpp"
 
-   struct aerofoilView : wxWindow{
+   struct aerofoilView : wxScrolledWindow{
 
       aerofoilView(wxFrame* parent, aerofoilDoc* doc);
 

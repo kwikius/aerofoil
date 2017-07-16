@@ -4,7 +4,7 @@
 
 #include "aerofoilView.hpp"
 
-BEGIN_EVENT_TABLE(aerofoilView,wxWindow)
+BEGIN_EVENT_TABLE(aerofoilView,wxScrolledWindow)
 
  EVT_PAINT(aerofoilView::OnPaint)
  EVT_SIZE(aerofoilView::OnSize)
@@ -13,11 +13,18 @@ BEGIN_EVENT_TABLE(aerofoilView,wxWindow)
 END_EVENT_TABLE()
 
 aerofoilView::aerofoilView(wxFrame* parent, aerofoilDoc* doc)
-: wxWindow(parent, wxID_ANY),m_doc(doc)
+: wxScrolledWindow(parent, wxID_ANY),m_doc(doc)
 {
-    this->SetWindowStyle(wxVSCROLL | wxHSCROLL);
-    this->SetScrollbar(wxVERTICAL,50,10,110);
-    this->SetScrollbar(wxHORIZONTAL,50,10,110);
+//    this->SetWindowStyle(wxVSCROLL | wxHSCROLL);
+//    this->SetScrollbar(wxVERTICAL,50,10,110);
+//    this->SetScrollbar(wxHORIZONTAL,50,10,110);
+
+ this->SetVirtualSize(10000,10000);
+    // rate in pixels per scrollunit
+    this->SetScrollRate(100,100);
+    // in scrollunits
+    this->Scroll(50,50);
+    this->ShowScrollbars (wxSHOW_SB_ALWAYS,wxSHOW_SB_ALWAYS);
 }
 
 void aerofoilView::OnPaint(wxPaintEvent & event)

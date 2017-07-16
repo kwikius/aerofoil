@@ -11,7 +11,7 @@
     wing shape between two sections
 */
 
-#include "/home/andy/cpp/old_quan/quan-trunk/quan/aero/selig_aerofoil.hpp"
+#include "selig_aerofoil.hpp"
 #include <quan/gx/symbol_value.hpp>
 
 struct wing_template{

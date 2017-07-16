@@ -7,7 +7,7 @@
 #include <quan/length.hpp>
 #include <quan/two_d/vect.hpp>
 #include <quan/gx/symbol_ref.hpp>
-#include "/home/andy/cpp/old_quan/quan-trunk/quan/aero/selig_aerofoil.hpp"
+#include "selig_aerofoil.hpp"
 #include <vector>
 
 #include "wing_template.hpp"
