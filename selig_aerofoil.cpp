@@ -109,7 +109,7 @@ bool quan::aero::selig_aerofoil::load(
 }
 
 std::ostream & quan::aero::operator<< (std::ostream & out,
-quan::aero::selig_aerofoil const & aerofoil)
+quan::aero::aerofoil const & aerofoil)
 {
    out << aerofoil.get_name() << '\n';
    for (std::size_t i = 0; i < aerofoil.get_num_coords() ; ++i){

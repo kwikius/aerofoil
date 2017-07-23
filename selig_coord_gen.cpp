@@ -47,11 +47,16 @@ namespace quan{
    
 }}
 
+/*
+ expect coords x value to decrease as the index increases
+ expect x to be between 1 and 0 ( allow some lewway for rounding)
+*/
 quan::two_d::vect<double> 
 quan::aero::selig_aerofoil::get_upper_coord(
  double const & percent
 ) const
 {
+   // first cur_pos should be  but allow extra for rounding errors
    double cur_xpos = 2.0;
    for ( std::size_t i = 0, num_i = this->m_coords.size() ; i < num_i;++i)
    {
@@ -62,11 +67,11 @@ quan::aero::selig_aerofoil::get_upper_coord(
       cur_xpos = m_coords[i].x;
       int res = compare(cur_xpos,percent,0.000001);
       switch(res){
-         case 0:
+         case 0: // cur_pos == percent "exact" match
             return this->m_coords[i];
-         case 1: // xpos > percent
+         case 1: // cur_xpos > percent
             continue;
-         case -1: //xpos > percent 
+         case -1: //xpos < percent 
          {
             auto p2 = this->m_coords[i-1];
             auto p3 = this->m_coords[i];

@@ -86,7 +86,7 @@ aerofoilFrame::aerofoilFrame(aerofoilDoc* doc)
     // create a status bar with some information about the used wxWidgets version
     CreateStatusBar(2);
     SetStatusText(_("Hello Code::Blocks user!"),0);
-   SetStatusText(quan::gx::wxwidgets::to_wxString(this->m_view->m_doc->m_wing_templates[0].m_aerofoil.get_name()),1);
+    SetStatusText(quan::gx::wxwidgets::to_wxString(this->m_view->m_doc->m_wing_templates[0].get_foil()->get_name()),1);
   //  SetStatusText(wxbuildinfo(short_f), 1);
 #endif // wxUSE_STATUSBAR
 
@@ -177,14 +177,20 @@ void aerofoilFrame::OnSectionAerofoilFile(wxCommandEvent& event)
       std::string std_str = quan::to_string<char>(str2);
       std::ofstream file("output_name.txt");
       file << "#" << std_str << "#\n";
-     // std::ostringstream ostr;
-      if( this->m_view->m_doc->m_wing_templates.size() ==0){
-        this->m_view->m_doc->m_wing_templates.push_back(wing_template{});
-      }
-      if( this->m_view->m_doc->m_wing_templates[0].m_aerofoil.load(std_str,file)){
+
+      quan::aero::selig_aerofoil* p_foil = new quan::aero::selig_aerofoil;
+
+
+      if(p_foil->load(std_str,file)){
+         if( this->m_view->m_doc->m_wing_templates.size() ==0){
+            this->m_view->m_doc->m_wing_templates.push_back(wing_template{p_foil});
+         }else{
+            this->m_view->m_doc->m_wing_templates[0].set_foil(p_foil);
+         }
          this->m_view->m_doc->set_modified(true);
-         SetStatusText(quan::gx::wxwidgets::to_wxString(this->m_view->m_doc->m_wing_templates[0].m_aerofoil.get_name()),1);
+         SetStatusText(quan::gx::wxwidgets::to_wxString(this->m_view->m_doc->m_wing_templates[0].get_foil()->get_name()),1);
       }else{
+        delete p_foil;
         wxMessageBox(wxT("file load failed\n"));
       }
    }
@@ -192,6 +198,7 @@ void aerofoilFrame::OnSectionAerofoilFile(wxCommandEvent& event)
    if (this->m_view->m_doc->is_modified()){
       
       this->m_view->Refresh();
+      this->m_view->Update();
    }
 }
 
@@ -310,6 +317,7 @@ void aerofoilFrame::do_symbol_dialog(
    d->Destroy();
    if (this->m_view->m_doc->is_modified()){
       this->m_view->Refresh();
+      this->m_view->Update();
    }
 }
 

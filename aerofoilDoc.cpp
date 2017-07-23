@@ -39,11 +39,11 @@ m_foam_rect_size{"Foam Size","X Y",vect2_mm{mm{50},mm{40}},
    std::ostringstream ostr;
    bool m_aerofoil_loaded = false;
    try{
-     
-      this->m_wing_templates.push_back(wing_template{});
-      m_aerofoil_loaded = this->m_wing_templates[0].m_aerofoil.load(
-         "S3021-095-84.dat", ostr
-      );
+      quan::aero::selig_aerofoil* p_foil = new quan::aero::selig_aerofoil;
+      bool loaded = p_foil->load("S3021-095-84.dat", ostr);
+
+      this->m_wing_templates.push_back(wing_template{p_foil});
+      m_aerofoil_loaded = loaded;
    }catch (std::exception& e){
       if ( ! m_aerofoil_loaded){
          wxMessageBox(wxT("aerofoil load failed ") + quan::gx::wxwidgets::to_wxString(e.what()));
@@ -61,7 +61,7 @@ aerofoilDoc::~aerofoilDoc()
 void aerofoilDoc::render(quan::gx::graphics_context<aerofoilDoc::mm> const & gxc)const
 {
     auto & wt = this->m_wing_templates[0];
-   for (std::size_t i = 1, num = wt.m_aerofoil.get_num_coords();
+   for (std::size_t i = 1, num = wt.get_foil()->get_num_coords();
          i < (num); ++i)
    {
       vect2_mm p1 = wt.calc_coord(i-1);
@@ -70,7 +70,7 @@ void aerofoilDoc::render(quan::gx::graphics_context<aerofoilDoc::mm> const & gxc
    }
    if ( wt.m_TE_thickness.cref() > mm{0}){
        vect2_mm p1 = wt.calc_coord(0);
-       vect2_mm p2 = wt.calc_coord(wt.m_aerofoil.get_num_coords()-1 );
+       vect2_mm p2 = wt.calc_coord(wt.get_foil()->get_num_coords()-1 );
        gxc.draw_line({p1,p2,mm{0.1}});
    }
     vect2_mm fs = this->m_foam_rect_size.cref(); ;
@@ -134,9 +134,7 @@ void aerofoilDoc::output_postscript()const
    vect2_d  p = this->m_wing_templates[0].calc_coord(0) / unit;
    out <<  p.x << " " << p.y << " moveto\n";
    auto & wt = this->m_wing_templates[0];
-   for (std::size_t i = 1, num = wt.m_aerofoil.get_num_coords();
-         i < (num); ++i)
-   {
+   for (std::size_t i = 1, num = wt.get_foil()->get_num_coords();i < (num); ++i){
        p = wt.calc_coord(i)/unit;
        out <<  p.x << " " << p.y << " lineto\n";
    }

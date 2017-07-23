@@ -15,11 +15,9 @@ END_EVENT_TABLE()
 aerofoilView::aerofoilView(wxFrame* parent, aerofoilDoc* doc)
 : wxScrolledWindow(parent, wxID_ANY),m_doc(doc)
 {
-//    this->SetWindowStyle(wxVSCROLL | wxHSCROLL);
-//    this->SetScrollbar(wxVERTICAL,50,10,110);
-//    this->SetScrollbar(wxHORIZONTAL,50,10,110);
 
- this->SetVirtualSize(10000,10000);
+    this->SetVirtualSize(10000,10000);
+    this->SetAutoLayout(false);
     // rate in pixels per scrollunit
     this->SetScrollRate(100,100);
     // in scrollunits
@@ -64,8 +62,8 @@ void aerofoilView::OnSize(wxSizeEvent & event)
    this->m_device_window.m_size_mm.y 
    = (this->m_device_window.m_size_px.y * display_size_in_mm.y) / display_size_in_px.y;
   
-   this->Refresh();
-
+  this->Refresh();
+  this->Update();
 }
 
 void aerofoilView::OnScroll(wxScrollWinEvent & event)
@@ -76,6 +74,8 @@ void aerofoilView::OnScroll(wxScrollWinEvent & event)
       this->OnVScroll(event);
   }
   this->Refresh();
+  this->Update();
+
 }
 
 void aerofoilView::OnHScroll(wxScrollWinEvent & event)
@@ -85,7 +85,6 @@ void aerofoilView::OnHScroll(wxScrollWinEvent & event)
 
 void aerofoilView::OnVScroll(wxScrollWinEvent & event)
 {
-    this->m_doc->m_drawing_view.set_y_scroll_ratio( -(event.GetPosition() - 50 )/100.0);
+   this->m_doc->m_drawing_view.set_y_scroll_ratio( -(event.GetPosition() - 50 )/100.0);
 }
-
 
