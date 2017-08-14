@@ -42,7 +42,7 @@ m_foam_rect_size{"Foam Size","X Y",vect2_mm{mm{50},mm{40}},
       quan::aero::selig_aerofoil* p_foil = new quan::aero::selig_aerofoil;
       bool loaded = p_foil->load("S3021-095-84.dat", ostr);
 
-      this->m_wing_templates.push_back(wing_template{p_foil});
+      this->m_wing_sections.push_back(wing_section{p_foil});
       m_aerofoil_loaded = loaded;
    }catch (std::exception& e){
       if ( ! m_aerofoil_loaded){
@@ -60,7 +60,7 @@ aerofoilDoc::~aerofoilDoc()
 
 void aerofoilDoc::render(quan::gx::graphics_context<aerofoilDoc::mm> const & gxc)const
 {
-    auto & wt = this->m_wing_templates[0];
+    auto & wt = this->m_wing_sections[0];
    for (std::size_t i = 1, num = wt.get_foil()->get_num_coords();
          i < (num); ++i)
    {
@@ -131,9 +131,9 @@ void aerofoilDoc::output_postscript()const
 // set up landscape transform...
    out << ( paper_size / (2 * unit) ).x << " " << (paper_size / (2 * unit)).y << " translate\n";
    out << "90 rotate\n"; // above code sets this up in landscape
-   vect2_d  p = this->m_wing_templates[0].calc_coord(0) / unit;
+   vect2_d  p = this->m_wing_sections[0].calc_coord(0) / unit;
    out <<  p.x << " " << p.y << " moveto\n";
-   auto & wt = this->m_wing_templates[0];
+   auto & wt = this->m_wing_sections[0];
    for (std::size_t i = 1, num = wt.get_foil()->get_num_coords();i < (num); ++i){
        p = wt.calc_coord(i)/unit;
        out <<  p.x << " " << p.y << " lineto\n";

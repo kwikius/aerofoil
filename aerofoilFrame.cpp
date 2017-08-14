@@ -86,7 +86,7 @@ aerofoilFrame::aerofoilFrame(aerofoilDoc* doc)
     // create a status bar with some information about the used wxWidgets version
     CreateStatusBar(2);
     SetStatusText(_("Hello Code::Blocks user!"),0);
-    SetStatusText(quan::gx::wxwidgets::to_wxString(this->m_view->m_doc->m_wing_templates[0].get_foil()->get_name()),1);
+    SetStatusText(quan::gx::wxwidgets::to_wxString(this->m_view->m_doc->m_wing_sections[0].get_foil()->get_name()),1);
   //  SetStatusText(wxbuildinfo(short_f), 1);
 #endif // wxUSE_STATUSBAR
 
@@ -124,26 +124,26 @@ void aerofoilFrame::OnDrawingSize(wxCommandEvent& event)
 
 void aerofoilFrame::OnSectionChord(wxCommandEvent& event)
 {
-  this->do_symbol_dialog( &this->m_view->m_doc->m_wing_templates[0].m_chord);
+  this->do_symbol_dialog( &this->m_view->m_doc->m_wing_sections[0].m_chord);
 }
 
 void aerofoilFrame::OnSectionAngle(wxCommandEvent& event)
 {
-  this->do_symbol_dialog( &this->m_view->m_doc->m_wing_templates[0].m_angle);
+  this->do_symbol_dialog( &this->m_view->m_doc->m_wing_sections[0].m_angle);
 }
 
 void aerofoilFrame::OnSectionAxis(wxCommandEvent& event)
 {  
-   this->do_symbol_dialog( &this->m_view->m_doc->m_wing_templates[0].m_axis);
+   this->do_symbol_dialog( &this->m_view->m_doc->m_wing_sections[0].m_axis);
 }
 void aerofoilFrame::OnSectionOffset(wxCommandEvent& event)
 {
-   this->do_symbol_dialog( &this->m_view->m_doc->m_wing_templates[0].m_offset);
+   this->do_symbol_dialog( &this->m_view->m_doc->m_wing_sections[0].m_offset);
 }
 
 void aerofoilFrame::OnSectionTeThickness(wxCommandEvent& event)
 {
-   this->do_symbol_dialog( &this->m_view->m_doc->m_wing_templates[0].m_TE_thickness);
+   this->do_symbol_dialog( &this->m_view->m_doc->m_wing_sections[0].m_TE_thickness);
 }
 
 void aerofoilFrame::OnSectionFoamRectSize(wxCommandEvent& event)
@@ -182,13 +182,13 @@ void aerofoilFrame::OnSectionAerofoilFile(wxCommandEvent& event)
 
 
       if(p_foil->load(std_str,file)){
-         if( this->m_view->m_doc->m_wing_templates.size() ==0){
-            this->m_view->m_doc->m_wing_templates.push_back(wing_template{p_foil});
+         if( this->m_view->m_doc->m_wing_sections.size() ==0){
+            this->m_view->m_doc->m_wing_sections.push_back(wing_section{p_foil});
          }else{
-            this->m_view->m_doc->m_wing_templates[0].set_foil(p_foil);
+            this->m_view->m_doc->m_wing_sections[0].set_foil(p_foil);
          }
          this->m_view->m_doc->set_modified(true);
-         SetStatusText(quan::gx::wxwidgets::to_wxString(this->m_view->m_doc->m_wing_templates[0].get_foil()->get_name()),1);
+         SetStatusText(quan::gx::wxwidgets::to_wxString(this->m_view->m_doc->m_wing_sections[0].get_foil()->get_name()),1);
       }else{
         delete p_foil;
         wxMessageBox(wxT("file load failed\n"));

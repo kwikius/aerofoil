@@ -14,15 +14,15 @@
 #include "selig_aerofoil.hpp"
 #include <quan/gx/symbol_value.hpp>
 
-struct wing_template{
+struct wing_section{
     
     typedef quan::length::mm mm;
     typedef quan::angle::deg deg;
     typedef quan::two_d::vect<mm> vect2_mm;
     typedef quan::two_d::vect<double> vect2_d;
 
-    wing_template(quan::aero::aerofoil* aerofoil);
-    ~wing_template();
+    wing_section(quan::aero::aerofoil* aerofoil);
+    ~wing_section();
     // selig aerofoil coords
     private:
     quan::aero::aerofoil*              m_aerofoil;
@@ -48,10 +48,10 @@ struct wing_template{
     void get_coords(std::vector<vect2_mm> & coords_vect) const;
     vect2_mm  calc_coord(int i) const;
    
-    wing_template(wing_template && in);
+    wing_section(wing_section && in);
 
-    wing_template(wing_template const &) = delete;
-    wing_template& operator =(wing_template const &) = delete;
+    wing_section(wing_section const &) = delete;
+    wing_section& operator =(wing_section const &) = delete;
 };//wingtemplate
 
 

@@ -1,11 +1,11 @@
-#include "wing_template.hpp"
+#include "wing_section.hpp"
 #include <cassert>
 
 /*
    aerofoil was created on heap
    wing template takes ownership of the memory
 */
-wing_template::wing_template( quan::aero::aerofoil * aerofoil)
+wing_section::wing_section( quan::aero::aerofoil * aerofoil)
 :m_aerofoil {aerofoil}
 ,m_chord{"Section Chord","",mm{150},mm{10},mm{100000}}
 ,m_angle{"Section Angle","",deg{0},deg{-90},deg{90}}
@@ -22,7 +22,7 @@ wing_template::wing_template( quan::aero::aerofoil * aerofoil)
   assert (m_aerofoil != nullptr);
 }
 
-wing_template::wing_template( wing_template && in)
+wing_section::wing_section( wing_section && in)
 :m_aerofoil{in.move_foil()}
  ,m_chord{in.m_chord}
  ,m_angle{in.m_angle}
@@ -34,14 +34,14 @@ wing_template::wing_template( wing_template && in)
 }
 
  // current foil must be non null
- quan::aero::aerofoil* wing_template::get_foil() const
+ quan::aero::aerofoil* wing_section::get_foil() const
  {
     assert ( m_aerofoil != nullptr);
     return m_aerofoil;
  } 
  // transfers ownership of the pointer to the calling function
  // returns the current non null foil and sets its own pointer to null
- quan::aero::aerofoil* wing_template::move_foil()
+ quan::aero::aerofoil* wing_section::move_foil()
  {
     quan::aero::aerofoil* temp = get_foil();
     m_aerofoil = nullptr;
@@ -50,7 +50,7 @@ wing_template::wing_template( wing_template && in)
  // foil has been created on heap
  // if there is a current foil
  // it is deleted
- void wing_template::set_foil(quan::aero::aerofoil* foil)
+ void wing_section::set_foil(quan::aero::aerofoil* foil)
  {
    if(m_aerofoil != nullptr){
       delete m_aerofoil;
@@ -60,14 +60,14 @@ wing_template::wing_template( wing_template && in)
  } 
 
 
-wing_template::~wing_template()
+wing_section::~wing_section()
 {
    if ( m_aerofoil != nullptr){
       delete m_aerofoil;
    }
 }
 
-void wing_template::get_coords(std::vector<vect2_mm> & coords_vect)const
+void wing_section::get_coords(std::vector<vect2_mm> & coords_vect)const
 {
    assert ( m_aerofoil != nullptr);
    for ( int i = 0, numcoords = m_aerofoil->get_num_coords();
@@ -76,7 +76,7 @@ void wing_template::get_coords(std::vector<vect2_mm> & coords_vect)const
    }
 }
 
-wing_template::vect2_mm  wing_template::calc_coord(int i)const
+wing_section::vect2_mm  wing_section::calc_coord(int i)const
 {
    assert ( m_aerofoil != nullptr);
    double te_scaling = 0.5; // add a te wedge according to te thickness

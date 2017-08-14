@@ -10,7 +10,7 @@
 #include "selig_aerofoil.hpp"
 #include <vector>
 
-#include "wing_template.hpp"
+#include "wing_section.hpp"
 
 struct aerofoilDoc{
 
@@ -22,7 +22,7 @@ struct aerofoilDoc{
     typedef quan::two_d::vect<mm> vect2_mm;
     typedef quan::two_d::vect<double> vect2_d;
 
-    std::vector<wing_template> m_wing_templates;
+    std::vector<wing_section> m_wing_sections;
 
     quan::gx::simple_drawing<mm> m_drawing ;
     quan::gx::simple_drawing_view m_drawing_view;
