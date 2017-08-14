@@ -26,6 +26,7 @@ struct wing_template{
     // selig aerofoil coords
     private:
     quan::aero::aerofoil*              m_aerofoil;
+    // returns current non null foil and sets it to null
     quan::aero::aerofoil*              move_foil();
     public:
     //aerofoil chord
@@ -34,13 +35,10 @@ struct wing_template{
     quan::gx::symbol_value<deg>        m_angle ;
     // wedge for t.e
     quan::gx::symbol_value<mm>         m_TE_thickness;
-
     // foil must be non null
-    quan::aero::aerofoil* get_foil() const;
-    // returns curreent non null foil and sets it to null
-    
+    quan::aero::aerofoil*              get_foil() const;
     // foil must originally be null
-    void set_foil(quan::aero::aerofoil*);
+    void                               set_foil(quan::aero::aerofoil*);
     // center of rotation rel aerofoil(0,0)
     quan::gx::symbol_value<vect2_mm>   m_axis;
     // rel center of drawing
@@ -54,8 +52,6 @@ struct wing_template{
 
     wing_template(wing_template const &) = delete;
     wing_template& operator =(wing_template const &) = delete;
-    
-
 };//wingtemplate
 
 
