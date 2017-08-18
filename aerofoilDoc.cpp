@@ -60,47 +60,48 @@ aerofoilDoc::~aerofoilDoc()
 
 void aerofoilDoc::render(quan::gx::graphics_context<aerofoilDoc::mm> const & gxc)const
 {
-    auto & wt = this->m_wing_sections[0];
+   auto & wt = this->m_wing_sections[0];
    for (std::size_t i = 1, num = wt.get_foil()->get_num_coords();
-         i < (num); ++i)
-   {
+         i < (num); ++i){
       vect2_mm p1 = wt.calc_coord(i-1);
       vect2_mm p2 = wt.calc_coord(i);
       gxc.draw_line({p1,p2,mm{0.1}});
    }
+   // join up the top and bottom surfaces at the trailing edge
+   // if the trailing edge has a finite thickness
    if ( wt.m_TE_thickness.cref() > mm{0}){
        vect2_mm p1 = wt.calc_coord(0);
        vect2_mm p2 = wt.calc_coord(wt.get_foil()->get_num_coords()-1 );
        gxc.draw_line({p1,p2,mm{0.1}});
    }
-    vect2_mm fs = this->m_foam_rect_size.cref(); ;
-    vect2_mm fpos = this->m_foam_rect_pos.cref(); ;
-    vect2_mm p1 = vect2_mm{-fs.x/2,-fs.y/2} + fpos; 
-    vect2_mm p2 = vect2_mm{-fs.x/2, fs.y/2} + fpos; 
-    vect2_mm p3 = vect2_mm{ fs.x/2, fs.y/2} + fpos;
-    vect2_mm p4 = vect2_mm{ fs.x/2,-fs.y/2} + fpos; 
 
-    gxc.draw_line({p1,p2,mm{0.1}}); 
-    gxc.draw_line({p2,p3,mm{0.1}});
-    gxc.draw_line({p3,p4,mm{0.1}});
-    gxc.draw_line({p4,p1,mm{0.1}});
+   // draw foam rect ------------
+   vect2_mm fs = this->m_foam_rect_size.cref(); ;
+   vect2_mm fpos = this->m_foam_rect_pos.cref(); ;
+   vect2_mm p1 = vect2_mm{-fs.x/2,-fs.y/2} + fpos; 
+   vect2_mm p2 = vect2_mm{-fs.x/2, fs.y/2} + fpos; 
+   vect2_mm p3 = vect2_mm{ fs.x/2, fs.y/2} + fpos;
+   vect2_mm p4 = vect2_mm{ fs.x/2,-fs.y/2} + fpos; 
+   gxc.draw_line({p1,p2,mm{0.1}}); 
+   gxc.draw_line({p2,p3,mm{0.1}});
+   gxc.draw_line({p3,p4,mm{0.1}});
+   gxc.draw_line({p4,p1,mm{0.1}});
 
-    vect2_mm ds = this->m_drawing.get_size() ;
-    vect2_mm orig = this->m_drawing.get_origin();
+   // draw outline of paper -----------------
+   vect2_mm ds = this->m_drawing.get_size() ;
+   vect2_mm orig = this->m_drawing.get_origin();
 
-    p1 =  vect2_mm{-ds.x/2,-ds.y/2} - orig;
-    p2 =  vect2_mm{-ds.x/2, ds.y/2} - orig;
-    p3 =  vect2_mm{ ds.x/2, ds.y/2} - orig;
-    p4 =  vect2_mm{ ds.x/2,-ds.y/2} - orig;
+   p1 =  vect2_mm{-ds.x/2,-ds.y/2} - orig;
+   p2 =  vect2_mm{-ds.x/2, ds.y/2} - orig;
+   p3 =  vect2_mm{ ds.x/2, ds.y/2} - orig;
+   p4 =  vect2_mm{ ds.x/2,-ds.y/2} - orig;
 
-     quan::gx::abc_color::ptr gray{new quan::gx::rgb::gray{}};
+   quan::gx::abc_color::ptr gray{new quan::gx::rgb::gray{}};
 
-    gxc.draw_line({p1,p2,mm{0.1},gray}); 
-    gxc.draw_line({p2,p3,mm{0.1},gray});
-    gxc.draw_line({p3,p4,mm{0.1},gray});
-    gxc.draw_line({p4,p1,mm{0.1},gray});
-
-
+   gxc.draw_line({p1,p2,mm{0.1},gray}); 
+   gxc.draw_line({p2,p3,mm{0.1},gray});
+   gxc.draw_line({p3,p4,mm{0.1},gray});
+   gxc.draw_line({p4,p1,mm{0.1},gray});
 }
 
 void aerofoilDoc::output_postscript()const
@@ -141,20 +142,20 @@ void aerofoilDoc::output_postscript()const
    out << "closepath\n";
    out << "stroke\n";
 
-    vect2_mm fs = this->m_foam_rect_size.cref(); ;
-    vect2_mm fpos = this->m_foam_rect_pos.cref(); ;
-    vect2_d p1 = (vect2_mm{-fs.x/2,-fs.y/2} + fpos)/unit; 
-    vect2_d p2 = (vect2_mm{-fs.x/2, fs.y/2} + fpos)/unit; 
-    vect2_d p3 = (vect2_mm{ fs.x/2, fs.y/2} + fpos)/unit;
-    vect2_d p4 = (vect2_mm{ fs.x/2,-fs.y/2} + fpos)/unit; 
+   vect2_mm fs = this->m_foam_rect_size.cref(); ;
+   vect2_mm fpos = this->m_foam_rect_pos.cref(); ;
+   vect2_d p1 = (vect2_mm{-fs.x/2,-fs.y/2} + fpos)/unit; 
+   vect2_d p2 = (vect2_mm{-fs.x/2, fs.y/2} + fpos)/unit; 
+   vect2_d p3 = (vect2_mm{ fs.x/2, fs.y/2} + fpos)/unit;
+   vect2_d p4 = (vect2_mm{ fs.x/2,-fs.y/2} + fpos)/unit; 
    // quan::gx::primitives::simple_line<mm> line1 = {p1,p2};
-    out << "newpath\n";
+   out << "newpath\n";
    //  out << ( paper_size / (2 * unit) ).x << " " << (paper_size / (2 * unit)).y << " translate\n";
-    out <<  p1.x << " " << p1.y << " moveto\n";
-    out <<  p2.x << " " << p2.y << " lineto\n";
-    out <<  p3.x << " " << p3.y << " lineto\n";
-    out <<  p4.x << " " << p4.y << " lineto\n";
-    out << "closepath\n";
+   out <<  p1.x << " " << p1.y << " moveto\n";
+   out <<  p2.x << " " << p2.y << " lineto\n";
+   out <<  p3.x << " " << p3.y << " lineto\n";
+   out <<  p4.x << " " << p4.y << " lineto\n";
+   out << "closepath\n";
    out << "stroke\n";
    out << "showpage\n";
    
