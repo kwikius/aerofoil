@@ -12,7 +12,7 @@
 
 #include "aerofoilDoc.hpp"
 
-   struct aerofoilView : wxScrolledWindow{
+   struct aerofoilView : wxWindow{
 
       aerofoilView(wxFrame* parent, aerofoilDoc* doc);
 

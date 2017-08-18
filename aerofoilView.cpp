@@ -3,8 +3,9 @@
 #include <quan/gx/simple_drawing.hpp>
 
 #include "aerofoilView.hpp"
+#include <wx/log.h>
 
-BEGIN_EVENT_TABLE(aerofoilView,wxScrolledWindow)
+BEGIN_EVENT_TABLE(aerofoilView,wxWindow)
 
  EVT_PAINT(aerofoilView::OnPaint)
  EVT_SIZE(aerofoilView::OnSize)
@@ -13,16 +14,24 @@ BEGIN_EVENT_TABLE(aerofoilView,wxScrolledWindow)
 END_EVENT_TABLE()
 
 aerofoilView::aerofoilView(wxFrame* parent, aerofoilDoc* doc)
-: wxScrolledWindow(parent, wxID_ANY),m_doc(doc)
+: wxWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxVSCROLL | wxHSCROLL | wxALWAYS_SHOW_SB)
+,m_doc(doc)
 {
+    this->SetScrollbar(
+       wxVERTICAL  // vert or horz
+      ,50          // position
+      ,10         // thumb size
+      ,100        // range
+      , true 
+     );
 
-    this->SetVirtualSize(10000,10000);
-    this->SetAutoLayout(false);
-    // rate in pixels per scrollunit
-    this->SetScrollRate(100,100);
-    // in scrollunits
-    this->Scroll(50,50);
-    this->ShowScrollbars (wxSHOW_SB_ALWAYS,wxSHOW_SB_ALWAYS);
+     this->SetScrollbar(
+       wxHORIZONTAL  // vert or horz
+      ,50          // position
+      ,10         // thumb size
+      ,100        // range
+      , true 
+     );
 }
 
 void aerofoilView::OnPaint(wxPaintEvent & event)
@@ -80,11 +89,13 @@ void aerofoilView::OnScroll(wxScrollWinEvent & event)
 
 void aerofoilView::OnHScroll(wxScrollWinEvent & event)
 {
+   //wxLogMessage("OnHScroll called\n");
    this->m_doc->m_drawing_view.set_x_scroll_ratio( (event.GetPosition() - 50 )/100.0); 
 }
 
 void aerofoilView::OnVScroll(wxScrollWinEvent & event)
 {
+  // wxLogMessage("OnVScroll called\n");
    this->m_doc->m_drawing_view.set_y_scroll_ratio( -(event.GetPosition() - 50 )/100.0);
 }
 
