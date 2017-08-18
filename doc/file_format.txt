@@ -1,0 +1,26 @@
+
+
+#tree objects
+
+      # positive x is toward tail
+      # positive y is to port
+      # positive z is up
+
+wing [0] = {
+      # fraction of unit chord where the spline representing the wing sweep passes through each section
+      spline_origin = 0.3;
+      # spline representing wing sweep and span in pairs
+      # first in each pair is y position, second is sweep of that position
+      sweep_spline = [ 0.0 mm, 0.0 mm], [ 850.0 mm, 10.0 mm] ;
+   section [0] = {
+      aerofoil_file = "/home/andy/cpp/projects/aerofoil/Sections/selig/mh32.dat" ;
+      chord = 165.0 mm;
+      y_position = 0.0 mm;
+      # trailing edge thickness
+      TE_thickness = 0.5 mm;
+      # rotation around the y axis
+      incidence_angle = 0.0 deg;
+   }
+   
+   
+}
